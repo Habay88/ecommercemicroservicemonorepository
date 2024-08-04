@@ -1,7 +1,11 @@
 package com.habay.service;
 
-import com.alibou.ecommerce.exception.ProductPurchaseException;
+
+import com.habay.exception.ProductPurchaseException;
+import com.habay.model.ProductPurchaseRequest;
+import com.habay.model.ProductPurchaseResponse;
 import com.habay.model.ProductResponse;
+import com.habay.model.ProductRequest;
 import com.habay.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
