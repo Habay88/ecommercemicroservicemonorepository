@@ -2,6 +2,12 @@ package com.habay.service;
 
 import org.springframework.stereotype.Service;
 
+import com.habay.model.Category;
+import com.habay.model.Product;
+import com.habay.model.ProductPurchaseResponse;
+import com.habay.model.ProductRequest;
+import com.habay.model.ProductResponse;
+
 @Service
 public class ProductMapper {
     public Product toProduct(ProductRequest request) {
@@ -14,8 +20,7 @@ public class ProductMapper {
                 .category(
                         Category.builder()
                                 .id(request.categoryId())
-                                .build()
-                )
+                                .build())
                 .build();
     }
 
@@ -28,8 +33,7 @@ public class ProductMapper {
                 product.getPrice(),
                 product.getCategory().getId(),
                 product.getCategory().getName(),
-                product.getCategory().getDescription()
-        );
+                product.getCategory().getDescription());
     }
 
     public ProductPurchaseResponse toproductPurchaseResponse(Product product, double quantity) {
@@ -38,8 +42,6 @@ public class ProductMapper {
                 product.getName(),
                 product.getDescription(),
                 product.getPrice(),
-                quantity
-        );
+                quantity);
     }
 }
-

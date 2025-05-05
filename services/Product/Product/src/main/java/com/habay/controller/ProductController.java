@@ -1,6 +1,9 @@
 package com.habay.controller;
 
-
+import com.habay.model.ProductPurchaseRequest;
+import com.habay.model.ProductPurchaseResponse;
+import com.habay.model.ProductRequest;
+import com.habay.model.ProductResponse;
 import com.habay.service.ProductService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,22 +26,19 @@ public class ProductController {
 
     @PostMapping
     public ResponseEntity<Integer> createProduct(
-            @RequestBody @Valid ProductRequest request
-    ) {
+            @RequestBody @Valid ProductRequest request) {
         return ResponseEntity.ok(service.createProduct(request));
     }
 
     @PostMapping("/purchase")
     public ResponseEntity<List<ProductPurchaseResponse>> purchaseProducts(
-            @RequestBody List<ProductPurchaseRequest> request
-    ) {
+            @RequestBody List<ProductPurchaseRequest> request) {
         return ResponseEntity.ok(service.purchaseProducts(request));
     }
 
     @GetMapping("/{product-id}")
     public ResponseEntity<ProductResponse> findById(
-            @PathVariable("product-id") Integer productId
-    ) {
+            @PathVariable("product-id") Integer productId) {
         return ResponseEntity.ok(service.findById(productId));
     }
 

@@ -1,7 +1,12 @@
 package com.habay.service;
 
-import com.alibou.ecommerce.exception.ProductPurchaseException;
+import com.habay.exception.ProductPurchaseException;
+import com.habay.model.Product;
+import com.habay.model.ProductPurchaseRequest;
+import com.habay.model.ProductPurchaseResponse;
+import com.habay.model.ProductRequest;
 import com.habay.model.ProductResponse;
+import com.habay.repository.CategoryRepository;
 import com.habay.repository.ProductRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale.Category;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,11 +24,11 @@ import java.util.stream.Collectors;
 public class ProductService {
 
     private final ProductRepository repository;
+    private final CategoryRepository categoryRepository;
     private final ProductMapper mapper;
 
     public Integer createProduct(
-            ProductRequest request
-    ) {
+            ProductRequest request) {
         var product = mapper.toProduct(request);
         return repository.save(product).getId();
     }
@@ -31,6 +37,25 @@ public class ProductService {
         return repository.findById(id)
                 .map(mapper::toProductResponse)
                 .orElseThrow(() -> new EntityNotFoundException("Product not found with ID:: " + id));
+    }
+
+    public ProductResponse updateProduct(Integer id, ProductRequest productRequest){
+        Product existingProduct = repository.findById(id) .orElseThrow(() -> new EntityNotFoundException("Product not found with ID::: " + id));
+        Category category = categoryRepository.findById(id).orElseThrow() -> new EntityNotFoundException("Category not found with ID::: " + id);
+        
+        existingProduct.setName(productRequest.getName());
+        existingProduct.setDescription(productRequest.getDescription());
+        existingProduct.setPrice(productRequest.getPrice());
+        existingProduct.setAvailableQuantity(productRequest.getAvailableQuantity());
+        existingProduct.setCategor(category);
+        Product updatedProduct = repository.save(existingProduct);
+        return productMapper.toProductResponse(updatedProduct);
+    }
+
+    public void deleteProduct(Integer id) {
+        Product product = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        repository.delete(product);
     }
 
     public List<ProductResponse> findAll() {
@@ -42,8 +67,7 @@ public class ProductService {
 
     @Transactional(rollbackFor = ProductPurchaseException.class)
     public List<ProductPurchaseResponse> purchaseProducts(
-            List<ProductPurchaseRequest> request
-    ) {
+            List<ProductPurchaseRequest> request) {
         var productIds = request
                 .stream()
                 .map(ProductPurchaseRequest::productId)
@@ -61,7 +85,8 @@ public class ProductService {
             var product = storedProducts.get(i);
             var productRequest = sortedRequest.get(i);
             if (product.getAvailableQuantity() < productRequest.quantity()) {
-                throw new ProductPurchaseException("Insufficient stock quantity for product with ID:: " + productRequest.productId());
+                throw new ProductPurchaseException(
+                        "Insufficient stock quantity for product with ID:: " + productRequest.productId());
             }
             var newAvailableQuantity = product.getAvailableQuantity() - productRequest.quantity();
             product.setAvailableQuantity(newAvailableQuantity);

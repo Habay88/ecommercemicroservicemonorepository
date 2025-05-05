@@ -1,2 +1,4 @@
-package com.habay.service;public class OrderService {
+package com.habay.service;
+
+public class OrderService {
 }
