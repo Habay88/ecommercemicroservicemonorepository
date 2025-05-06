@@ -1,2 +1,10 @@
-package com.habay.customerclient;public class CustomerResponse {
+package com.habay.customerclient;
+
+public record CustomerResponse(
+        String id,
+        String firstname,
+        String lastname,
+        String email
+
+) {
 }
