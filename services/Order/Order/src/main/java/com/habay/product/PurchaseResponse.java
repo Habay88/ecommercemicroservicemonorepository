@@ -1,2 +1,5 @@
-package com.habay.product;public class PurchaseResponse {
+package com.habay.product;
+
+public class PurchaseResponse {
+
 }
