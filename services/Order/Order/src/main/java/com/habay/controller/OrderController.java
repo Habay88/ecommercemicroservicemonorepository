@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.habay.model.OrderRequest;
+import com.habay.model.OrderResponse;
+import com.habay.service.OrderService;
+
 @RestController
 @RequestMapping("/api/v1/orders")
 @RequiredArgsConstructor
@@ -21,8 +25,7 @@ public class OrderController {
 
     @PostMapping
     public ResponseEntity<Integer> createOrder(
-            @RequestBody @Valid OrderRequest request
-    ) {
+            @RequestBody @Valid OrderRequest request) {
         return ResponseEntity.ok(this.service.createOrder(request));
     }
 
@@ -33,9 +36,7 @@ public class OrderController {
 
     @GetMapping("/{order-id}")
     public ResponseEntity<OrderResponse> findById(
-            @PathVariable("order-id") Integer orderId
-    ) {
+            @PathVariable("order-id") Integer orderId) {
         return ResponseEntity.ok(this.service.findById(orderId));
     }
 }
-

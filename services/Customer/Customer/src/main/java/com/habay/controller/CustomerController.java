@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.habay.model.CustomerResponse;
+
 @RestController
 @RequestMapping("/api/v1/customers")
 @RequiredArgsConstructor
@@ -23,15 +25,13 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<String> createCustomer(
-            @RequestBody @Valid CustomerRequest request
-    ) {
+            @RequestBody @Valid CustomerRequest request) {
         return ResponseEntity.ok(this.service.createCustomer(request));
     }
 
     @PutMapping
     public ResponseEntity<Void> updateCustomer(
-            @RequestBody @Valid CustomerRequest request
-    ) {
+            @RequestBody @Valid CustomerRequest request) {
         this.service.updateCustomer(request);
         return ResponseEntity.accepted().build();
     }
@@ -43,22 +43,19 @@ public class CustomerController {
 
     @GetMapping("/exists/{customer-id}")
     public ResponseEntity<Boolean> existsById(
-            @PathVariable("customer-id") String customerId
-    ) {
+            @PathVariable("customer-id") String customerId) {
         return ResponseEntity.ok(this.service.existsById(customerId));
     }
 
     @GetMapping("/{customer-id}")
     public ResponseEntity<CustomerResponse> findById(
-            @PathVariable("customer-id") String customerId
-    ) {
+            @PathVariable("customer-id") String customerId) {
         return ResponseEntity.ok(this.service.findById(customerId));
     }
 
     @DeleteMapping("/{customer-id}")
     public ResponseEntity<Void> delete(
-            @PathVariable("customer-id") String customerId
-    ) {
+            @PathVariable("customer-id") String customerId) {
         this.service.deleteCustomer(customerId);
         return ResponseEntity.accepted().build();
     }
